@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.dao;
 
-import com.sun.javafx.collections.MappingChange;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 
@@ -14,8 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class MealDaoImplMemory implements MealDao {
-    private static final Logger log = getLogger(MealDaoImplMemory.class);
+public class MealDaoImplMem implements MealDao {
+    private static final Logger log = getLogger(MealDaoImplMem.class);
     private static final AtomicInteger AUTO_ID = new AtomicInteger(0);
     private static Map<Integer, Meal> meals = new HashMap<>();
 
@@ -50,8 +49,8 @@ public class MealDaoImplMemory implements MealDao {
     }
 
     @Override
-    public void removeMeal(Meal meal) {
-        meals.remove(meal.getId());
+    public void removeMeal(Integer id) {
+        meals.remove(id);
     }
 
     @Override
@@ -64,3 +63,4 @@ public class MealDaoImplMemory implements MealDao {
         return new ArrayList<>(meals.values());
     }
 }
+
