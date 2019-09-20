@@ -15,6 +15,7 @@
         <th>Date</th>
         <th>Desscription</th>
         <th>Calory</th>
+        <th>Action</th>
     </tr>
 
 
@@ -24,10 +25,18 @@
             <td>${meal.dateTime}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td>
+                <a href="/edit/${meal.id}">edit</a>
+                <a href="/delete/${meal.id}">delete</a>
+            </td>
         </tr>
     </c:forEach>
 
 </table>
 <%--</c:if>--%>
+
+<h2>Add</h2>
+<c:url value="/add" var="add"/>
+<a href="${add}">Add new meal</a>
 </body>
 </html>
