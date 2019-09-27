@@ -5,7 +5,8 @@
     <title>Edit</title>
 </head>
 <body>
-<c:url value="/editmeal" var="var"/>
+<jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
+<c:url value="editmeal" var="var"/>
 <form action="${var}" method="POST">
     <input type="hidden" name="id" value="${meal.id}">
     <label for="dateTime">Date</label>
@@ -14,7 +15,7 @@
     <input type="text" name="description" id="description" value="${meal.description}">
     <label for="calories">Calory</label>
     <input type="text" name="calories" id="calories" value="${meal.calories}">
-    <input type="submit" value="Edit film" value="${meal.calory}">
+    <input type="submit" value="Edit film" value="${meal.calories}">
 </form>
 </body>
 </html>

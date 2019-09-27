@@ -26,7 +26,8 @@
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td>
-                <a href="/edit/${meal.id}">edit</a>
+                <a href="editmeal?id=${meal.id}">edit</a>
+                <a href="editmeal">edit2</a>
                 <a href="/delete/${meal.id}">delete</a>
             </td>
         </tr>
