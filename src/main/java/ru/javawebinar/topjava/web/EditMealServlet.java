@@ -28,7 +28,7 @@ public class EditMealServlet extends HttpServlet {
         Integer id = Integer.parseInt(request.getParameter("id"));
         Meal meal = mealService.getMealById(id);
         request.setAttribute("meal", mealService.getMealById(Integer.parseInt(request.getParameter("id"))));
-        request.getRequestDispatcher("/editmeal.jsp").forward(request, response);
+        request.getRequestDispatcher("/meal.jsp").forward(request, response);
 
     }
 }

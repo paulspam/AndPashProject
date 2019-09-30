@@ -26,9 +26,9 @@
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td>
-                <a href="editmeal?id=${meal.id}">edit</a>
-                <a href="editmeal">edit2</a>
-                <a href="/delete/${meal.id}">delete</a>
+                <a href="meals?action=edit&id=${meal.id}">edit</a>
+                <a href="editmeal?id=${meal.id}">edit2</a>
+                <a href="meals?action=delete&id=${meal.id}">delete</a>
             </td>
         </tr>
     </c:forEach>
@@ -37,7 +37,7 @@
 <%--</c:if>--%>
 
 <h2>Add</h2>
-<c:url value="/add" var="add"/>
-<a href="${add}">Add new meal</a>
+<%--<c:url value="/add" var="add"/>--%>
+<a href="meals?action=add">Add new meal</a>
 </body>
 </html>

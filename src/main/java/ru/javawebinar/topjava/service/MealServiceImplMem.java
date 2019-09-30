@@ -11,13 +11,8 @@ public class MealServiceImplMem implements MealService {
     private MealDao mealDao = new MealDaoImplMem();
 
     @Override
-    public void addMeal(Meal meal) {
-        mealDao.addMeal(meal);
-    }
-
-    @Override
-    public void updateMeal(Meal meal) {
-        mealDao.updateMeal(meal);
+    public void saveMeal(Meal meal) {
+        mealDao.saveMeal(meal);
     }
 
     @Override
