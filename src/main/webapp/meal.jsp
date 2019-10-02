@@ -2,11 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Edit</title>
+    <title>Meal</title>
 </head>
 <body>
+<h3><a href="index.html">Home</a></h3>
+<h2>${param.action == "add" ? "Add meal" : "Edit meal"}</h2>
 <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
-<c:url value="editmeal" var="var"/>
+<c:url value="meals" var="var"/>
 <form action="${var}" method="POST">
     <input type="hidden" name="id" value="${meal.id}">
     <label for="dateTime">Date</label>
@@ -15,7 +17,8 @@
     <input type="text" name="description" id="description" value="${meal.description}">
     <label for="calories">Calory</label>
     <input type="text" name="calories" id="calories" value="${meal.calories}">
-    <input type="submit" value="Edit film" value="${meal.calories}">
+    <button type="submit">Save</button>
+    <button onclick="window.history.back()">Cancel</button>
 </form>
 </body>
 </html>

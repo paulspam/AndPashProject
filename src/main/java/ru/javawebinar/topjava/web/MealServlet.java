@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class MealServlet extends HttpServlet {
@@ -25,7 +27,16 @@ public class MealServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
+        String sId = request.getParameter("id");
+
+        Meal meal = new Meal(sId.isEmpty() ? null : Integer.valueOf(sId),
+                LocalDateTime.parse(request.getParameter("dateTime")),
+                request.getParameter("description"),
+                Integer.valueOf(request.getParameter("calories")));
+        mealService.saveMeal(meal);
+        response.sendRedirect("meals");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,8 +45,12 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         switch (action == null ? "all" : action) {
+            case "add":
             case "edit":
-                request.setAttribute("meal", mealService.getMealById(Integer.parseInt(request.getParameter("id"))));
+                Meal meal = action.equals("add") ?
+                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
+                        mealService.getMealById(Integer.valueOf(request.getParameter("id")));
+                request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/meal.jsp").forward(request, response);
                 break;
             case "delete":
@@ -48,7 +63,6 @@ public class MealServlet extends HttpServlet {
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
         }
-
 
 
     }
