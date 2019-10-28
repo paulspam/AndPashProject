@@ -18,7 +18,7 @@
     <label for="calories">Calory</label>
     <input type="text" name="calories" id="calories" value="${meal.calories}">
     <button type="submit">Save</button>
-    <button onclick="window.history.back()">Cancel</button>
+    <button type="reset" onclick="window.history.back()">Cancel</button>
 </form>
 </body>
 </html>
