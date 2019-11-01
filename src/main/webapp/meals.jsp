@@ -3,28 +3,33 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Meals</title>
+    <link rel="stylesheet" href="resources/css/w3.css">
 </head>
-<body>
+<body class="w3-light-grey">
 <h3><a href="index.html">Home</a></h3>
+<div class="w3-container w3-blue-grey w3-opacity w3-left-align">
 <h2>Meals</h2>
+</div>
 
 
 <%--<c:if test="${!empty itemList}">--%>
-<table class="item-table">
+<table class="w3-table-all">
+    <thead>
     <tr>
         <th>Date</th>
-        <th>Desscription</th>
+        <th>Description</th>
         <th>Calory</th>
         <th>Action</th>
     </tr>
-
+    <thead>
 
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach items="${mealList}" var="meal">
 
 
-        <tr style="color:${meal.exceed ? 'red' : 'greenyellow' }">
+        <tr style="color:${meal.exceed ? 'purple' : 'teal' }">
 
             <td>
                 <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
@@ -42,7 +47,7 @@
 </table>
 <%--</c:if>--%>
 
-<h2>Add</h2>
+<h3>Add</h3>
 <%--<c:url value="/add" var="add"/>--%>
 <a href="meals?action=add">Add new meal</a>
 </body>

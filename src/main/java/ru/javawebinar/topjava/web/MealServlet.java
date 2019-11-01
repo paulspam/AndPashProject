@@ -16,8 +16,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import org.slf4j.Logger;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
+    private static final Logger LOG = getLogger(MealServlet.class);
+    
+    
     private MealService mealService;
 
     @Override
@@ -36,6 +42,7 @@ public class MealServlet extends HttpServlet {
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories")));
         mealService.saveMeal(meal);
+        LOG.debug("meal" + meal + " saved");
         response.sendRedirect("meals");
     }
 
@@ -50,15 +57,23 @@ public class MealServlet extends HttpServlet {
                 Meal meal = action.equals("add") ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
                         mealService.getMealById(Integer.valueOf(request.getParameter("id")));
+                if (action.equals("add")) {
+                    LOG.debug("meal " + meal + " added");
+                }
+                if (action.equals("edit")) {
+                    LOG.debug("meal " + meal + " edited");
+                }
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/meal.jsp").forward(request, response);
                 break;
             case "delete":
+                LOG.debug("meal deleted");
                 mealService.removeMeal(Integer.parseInt(request.getParameter("id")));
                 response.sendRedirect("meals");
                 break;
             case "all":
             default:
+                LOG.debug("forward to meals");
                 request.setAttribute("mealList", MealsUtil.getWithExceeded(mealService.listMeals(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
 
