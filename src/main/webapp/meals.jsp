@@ -12,9 +12,6 @@
 <div class="w3-container w3-blue-grey w3-opacity w3-left-align">
 <h2>Meals</h2>
 </div>
-
-
-<%--<c:if test="${!empty itemList}">--%>
 <table class="w3-table-all">
     <thead>
     <tr>
@@ -24,13 +21,9 @@
         <th>Action</th>
     </tr>
     <thead>
-
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach items="${mealList}" var="meal">
-
-
         <tr style="color:${meal.exceed ? 'purple' : 'teal' }">
-
             <td>
                 <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
                 <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
@@ -43,12 +36,8 @@
             </td>
         </tr>
     </c:forEach>
-
 </table>
-<%--</c:if>--%>
-
 <h3>Add</h3>
-<%--<c:url value="/add" var="add"/>--%>
 <a href="meals?action=add">Add new meal</a>
 </body>
 </html>

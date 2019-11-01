@@ -21,32 +21,14 @@ public class MealDaoImplMem implements MealDao {
     private Map<Integer, Meal> mealsRep = new ConcurrentHashMap<>();
 
     {
-        for (Meal meal: MealsUtil.MEALS
-             ) {
+        for (Meal meal : MealsUtil.MEALS
+        ) {
             saveMeal(meal);
         }
     }
 
-//    static {
-//        Meal meal1 = new Meal(AUTO_ID.getAndIncrement(), LocalDateTime.of(2015, Month.MAY, 30, 8, 0), "Завтрак", 500);
-//        mealsRep.put(meal1.getId(), meal1);
-//        Meal meal2 = new Meal(AUTO_ID.getAndIncrement(), LocalDateTime.of(2015, Month.MAY, 30, 12, 0), "Обед", 900);
-//        mealsRep.put(meal2.getId(), meal1);
-//        Meal meal3 = new Meal(AUTO_ID.getAndIncrement(), LocalDateTime.of(2015, Month.MAY, 30, 19, 0), "Ужин", 700);
-//        mealsRep.put(meal3.getId(), meal1);
-//        Meal meal4 = new Meal(AUTO_ID.getAndIncrement(), LocalDateTime.of(2015, Month.MAY, 31, 9, 0), "Завтрак", 500);
-//        mealsRep.put(meal4.getId(), meal1);
-//        Meal meal5 = new Meal(AUTO_ID.getAndIncrement(), LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 1100);
-//        mealsRep.put(meal5.getId(), meal1);
-//        Meal meal6 = new Meal(AUTO_ID.getAndIncrement(), LocalDateTime.of(2015, Month.MAY, 31, 18, 0), "Ужин", 800);
-//        mealsRep.put(meal6.getId(), meal1);
-//
-//
-//    }
-    // TODO Make Multythreading CRUD
     @Override
     public void saveMeal(Meal meal) {
-
         if (meal.isNew()) {
             meal.setId(AUTO_ID.getAndIncrement());
         }
@@ -58,7 +40,7 @@ public class MealDaoImplMem implements MealDao {
         mealsRep.remove(id);
     }
 
-   @Override
+    @Override
     public Meal getMealById(Integer id) {
         return mealsRep.get(id);
     }
