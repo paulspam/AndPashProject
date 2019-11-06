@@ -11,22 +11,22 @@ public class MealServiceImplMem implements MealService {
     private MealDao mealDao = new MealDaoImplMem();
 
     @Override
-    public void saveMeal(Meal meal) {
-        mealDao.saveMeal(meal);
+    public void save(Meal meal) {
+        mealDao.save(meal);
     }
 
     @Override
-    public void removeMeal(Integer id) {
-        mealDao.removeMeal(id);
+    public void remove(Integer id) {
+        mealDao.remove(id);
     }
 
     @Override
-    public Meal getMealById(Integer id) {
-        return mealDao.getMealById(id);
+    public Meal getById(Integer id) {
+        return mealDao.getById(id);
     }
 
     @Override
-    public List<Meal> listMeals() {
-        return mealDao.listMeals();
+    public List<Meal> getAll() {
+        return mealDao.getAll();
     }
 }
