@@ -10,9 +10,12 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.ADMIN_ID;
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.USER_ID;
@@ -29,38 +32,45 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         save(new Meal(ADMIN_ID, LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ обед", 500), ADMIN_ID);
     }
 
-
-
-    // TODO Start from here
-
     @Override
     public Meal save(Meal meal, int userId) {
         Integer mealId = meal.getId();
-
+        meal.setUserId(userId);
         if (meal.isNew()) {
             mealId = counter.incrementAndGet();
             meal.setId(mealId);
+            repository.put(meal.getId(), meal);
+            log.info("save {}", meal);
         } else
             if (get(mealId, userId) == null) {
                 return null;
             }
-        repository.put(meal.getId(), meal);
-        return meal;
+
+        return repository.computeIfPresent(mealId,
+                (id, oldMeal) -> oldMeal.getUserId().equals(userId) ? meal : oldMeal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return repository.remove(id) != null;
+        log.info("delete {}", id);
+        return repository.remove(id, get(id, userId));
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return repository.get(id);
+        log.info("get {}", id);
+        Meal getResult = repository.getOrDefault(id, new Meal(null, null, null, 0));
+        return getResult.getUserId().equals(userId) ? getResult : null;
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
-        return repository.values();
+    public List<Meal> getAll(int userId) {
+        log.info("getAll");
+        return repository.values().stream()
+                .filter(meal -> meal.getUserId().equals(userId))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
+
     }
 }
 

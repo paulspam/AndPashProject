@@ -7,7 +7,7 @@ import java.time.LocalTime;
 public class Meal extends BaseEntity {
     private Integer id;
 
-    private final Integer userId;
+    private Integer userId;
 
     private final LocalDateTime dateTime;
 
@@ -37,6 +37,10 @@ public class Meal extends BaseEntity {
 
     public Integer getUserId() {
         return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getDateTime() {
