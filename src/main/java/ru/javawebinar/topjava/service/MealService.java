@@ -3,8 +3,9 @@ package ru.javawebinar.topjava.service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-
-import java.util.Collection;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface MealService {
@@ -19,5 +20,10 @@ public interface MealService {
 
     List<Meal> getAll(Integer userId);
 
-    List<MealWithExceed> getAll(Integer userId, Integer caloriesPerDay);
+    default List<Meal> getBetweenDates(LocalDate startDate, LocalDate endDate, int userId){
+        return getBetweenDateTimes(LocalDateTime.of(startDate, LocalTime.MIN), LocalDateTime.of(endDate, LocalTime.MAX), userId);
+    }
+
+    List<Meal> getBetweenDateTimes(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
+
 }

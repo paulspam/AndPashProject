@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collection;
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.ADMIN_ID;
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.USER_ID;
 
@@ -28,8 +27,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     {
         MealsUtil.MEALS.forEach(m -> save(m, USER_ID));
-        save(new Meal(ADMIN_ID, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Админ ужин", 600), ADMIN_ID);
-        save(new Meal(ADMIN_ID, LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ обед", 500), ADMIN_ID);
+        save(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Админ ужин", 600), ADMIN_ID);
+        save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ обед", 500), ADMIN_ID);
     }
 
     @Override
@@ -70,7 +69,13 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
                 .filter(meal -> meal.getUserId().equals(userId))
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return getAll(userId).stream()
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDateTime(), startDate, endDate))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
     }
 }
-

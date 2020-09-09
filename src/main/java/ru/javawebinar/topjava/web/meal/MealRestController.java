@@ -2,22 +2,25 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.MealServiceImpl;
 import ru.javawebinar.topjava.to.MealWithExceed;
-
+import ru.javawebinar.topjava.util.MealsUtil;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
 public class MealRestController {
     private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
 
-    @Autowired
-    private MealServiceImpl service;
+    private final MealServiceImpl service;
+
+    public MealRestController(MealServiceImpl service) {
+        this.service = service;
+    }
 
     public Meal get(int id) {
         int userId = AuthorizedUser.id();
@@ -43,21 +46,18 @@ public class MealRestController {
         service.delete(id, userId);
     }
 
-    public List<Meal> getAll() {
-        int userId = AuthorizedUser.id();
-        log.info("getAll for user {}", userId);
-        return service.getAll(userId);
-    }
-
-    public List<MealWithExceed> getAllWithExceed() {
+    public List<MealWithExceed> getAll() {
         int userId = AuthorizedUser.id();
         int caloriesPerDay = AuthorizedUser.getCaloriesPerDay();
-        log.info("getAllWithExceed for user {}", userId);
-        return service.getAll(userId, caloriesPerDay);
+        log.info("getAll for user {}", userId);
+        return MealsUtil.getFilteredWithExceeded(
+                service.getAll(userId), LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
     }
 
-
-
-
-
+    public List<MealWithExceed> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        int userId = AuthorizedUser.id();
+        int caloriesPerDay = AuthorizedUser.getCaloriesPerDay();
+        log.info("getBetween dates {} - {} end time {} - {} for user {}", startDate, endDate, startTime, endTime, userId);
+        return MealsUtil.getFilteredWithExceeded(service.getBetweenDates(startDate, endDate, userId), startTime, endTime, caloriesPerDay);
+    }
 }

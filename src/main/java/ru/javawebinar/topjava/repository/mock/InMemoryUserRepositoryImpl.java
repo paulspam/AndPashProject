@@ -26,8 +26,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         save(new User(0, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN));
     }
 
-
-       @Override
+    @Override
     public User save(User user) {
         if (user.isNew()) {
             user.setId(counter.getAndIncrement());
@@ -39,12 +38,8 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean delete(int id) {
-        if (!repository.remove(id).equals(null)) {
-            log.info("delete {}", id);
-            return true;
-        } else {
-            return false;
-        }
+        log.info("delete {}", id);
+        return repository.remove(id) != null;
     }
 
     @Override
