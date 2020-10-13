@@ -16,14 +16,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.ADMIN_ID;
 import static ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.USER_ID;
+
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepositoryImpl.class);
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
-    private AtomicInteger counter = new AtomicInteger(0);
+    private AtomicInteger counter = new AtomicInteger(INTEGER_ZERO);
 
     {
         MealsUtil.MEALS.forEach(m -> save(m, USER_ID));

@@ -21,7 +21,7 @@ public class AuthorizedUser {
     }
 
     public static int id() {
-        return get().id;
+        return id;
     }
 
     public Set<Role> getRoles() {
