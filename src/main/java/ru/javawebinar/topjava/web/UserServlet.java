@@ -13,17 +13,19 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class UserServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
+    final String MEALS_PAGE = "meals";
+    final String USERS_JSP_WITH_SLASH = "/users.jsp";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.valueOf(request.getParameter("userId"));
         AuthorizedUser.setId(userId);
-        response.sendRedirect("meals");
+        response.sendRedirect(MEALS_PAGE);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to users");
-        request.getRequestDispatcher("/users.jsp").forward(request, response);
+        request.getRequestDispatcher(USERS_JSP_WITH_SLASH).forward(request, response);
     }
 }

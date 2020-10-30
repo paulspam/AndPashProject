@@ -20,10 +20,10 @@ public interface MealService {
 
     List<Meal> getAll(Integer userId);
 
+    List<Meal> getBetweenDateTimes(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
+
     default List<Meal> getBetweenDates(LocalDate startDate, LocalDate endDate, int userId){
         return getBetweenDateTimes(LocalDateTime.of(startDate, LocalTime.MIN), LocalDateTime.of(endDate, LocalTime.MAX), userId);
     }
-
-    List<Meal> getBetweenDateTimes(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId);
 
 }

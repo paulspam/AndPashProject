@@ -42,7 +42,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             mealId = counter.incrementAndGet();
             meal.setId(mealId);
             repository.put(meal.getId(), meal);
-            log.info("save {}", meal);
+            log.info("save meal {} for user {}", meal, userId);
         } else
             if (get(mealId, userId) == null) {
                 return null;
@@ -54,20 +54,20 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        log.info("delete {}", id);
+        log.info("delete meal {} for user {}", id, userId);
         return repository.remove(id, get(id, userId));
     }
 
     @Override
     public Meal get(int id, int userId) {
-        log.info("get {}", id);
+        log.info("get meal {} for user {}", id, userId);
         Meal getResult = repository.getOrDefault(id, new Meal(null, null, null, 0));
         return getResult.getUserId().equals(userId) ? getResult : null;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        log.info("getAll");
+        log.info("getAll for user {}", userId);
         return repository.values().stream()
                 .filter(meal -> meal.getUserId().equals(userId))
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())

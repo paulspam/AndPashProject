@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.meal;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,14 +14,15 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class MealRestController {
     private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
 
     private final MealServiceImpl service;
 
-    public MealRestController(MealServiceImpl service) {
-        this.service = service;
-    }
+//    public MealRestController(MealServiceImpl service) {
+//        this.service = service;
+//    }
 
     public Meal get(int id) {
         int userId = AuthorizedUser.id();
