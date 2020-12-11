@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
@@ -42,6 +43,12 @@ public class MealTestData {
                 }
             }
 );*/
-    public static final BeanMatcher<Meal> MATCHER = new BeanMatcher<>();
-
+public static final BeanMatcher<Meal> MATCHER = new BeanMatcher<>(
+        (expected, actual) -> expected == actual ||
+                (Objects.equals(expected.getId(), actual.getId())
+                        && Objects.equals(expected.getDateTime(), actual.getDateTime())
+                        && Objects.equals(expected.getDescription(), actual.getDescription())
+                        && Objects.equals(expected.getCalories(), actual.getCalories())
+                )
+);
 }
