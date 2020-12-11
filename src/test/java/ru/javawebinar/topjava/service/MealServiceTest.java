@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.ExpectedCount;
@@ -53,7 +54,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void get() {
+    public void testGet() {
         for (Meal meal: MEALS) {
             Meal testmeal = service.get(meal.getId(), AuthorizedUser.id());
             MATCHER.assertEquals(meal, testmeal);
@@ -61,7 +62,7 @@ public class MealServiceTest {
     }
 
     @Test (expected = NotFoundException.class)
-    public void getNotFound() {
+    public void testGetNotFound() {
         for (Meal meal: MEALS) {
             Meal testmeal = service.get(meal.getId(), INTEGER_ZERO);
             MATCHER.assertEquals(meal, testmeal);
@@ -69,7 +70,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void delete() {
+    public void testDelete() {
         service.delete(START_SEQ + 2, AuthorizedUser.id());
         List<Meal> newMeals = MEALS.stream()
                 .skip(1)
@@ -79,12 +80,12 @@ public class MealServiceTest {
     }
 
     @Test (expected = NotFoundException.class)
-    public void deleteNotFound() {
+    public void testDeleteNotFound() {
         service.delete(START_SEQ + 2, INTEGER_ZERO);
     }
 
     @Test
-    public void getBetweenDates() {
+    public void testGetBetweenDates() {
         LocalDate startTestDate = LocalDate.of(2015, Month.MAY, 30);
         LocalDate endTestDate = LocalDate.of(2015, Month.MAY, 30);
         List<Meal> newMeals = MEALS.stream()
@@ -96,7 +97,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getBetweenDateTimes() {
+    public void testGetBetweenDateTimes() {
         LocalDateTime startTestDate = LocalDateTime.of(2015, Month.MAY, 30, 10, 00);
         LocalDateTime endTestDate = LocalDateTime.of(2015, Month.MAY, 31, 10, 00);
         List<Meal> newMeals = MEALS.stream()
@@ -108,7 +109,7 @@ public class MealServiceTest {
     }
 
     @Test
-    public void getAll() {
+    public void testGetAll() {
         List<Meal> newMeals = MEALS.stream()
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
@@ -116,51 +117,32 @@ public class MealServiceTest {
     }
 
     @Test
-    public void update() {
-        List<Meal> newMeals = MEALS.stream()
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+    public void testUpdate() {
         Integer mealId = START_SEQ + 2;
-        Meal newMeal = new Meal(mealId, LocalDateTime.of(2015, Month.MAY, 30, 11, 15), "Новый ужин 2", 1500);
-        for (Meal meal: newMeals) {
-            if (meal.getId().equals(mealId)) {
-                meal.setDateTime(newMeal.getDateTime());
-                meal.setDescription(newMeal.getDescription());
-                meal.setCalories(newMeal.getCalories());
-            }
-        }
-        service.update(newMeal, AuthorizedUser.id());
-        MATCHER.assertCollectionEquals(newMeals, service.getAll(AuthorizedUser.id()));
+        Meal updMeal = new Meal(mealId, LocalDateTime.of(2015, Month.MAY, 30, 11, 15), "Новый ужин 2", 1500);
+        service.update(updMeal, AuthorizedUser.id());
+        MATCHER.assertEquals(updMeal, service.get(mealId, AuthorizedUser.id()));
     }
 
     @Test (expected = NotFoundException.class)
-    public void updateNotFound() {
+    public void testUpdateNotFound() {
         Integer mealId = START_SEQ + 2;
         Meal newMeal = new Meal(mealId, LocalDateTime.of(2015, Month.MAY, 30, 11, 15), "Новый ужин 2", 1500);
         service.update(newMeal, INTEGER_ZERO);
     }
 
     @Test
-    public void save() {
+    public void testSave() {
         List<Meal> newMeals = MEALS.stream()
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
-        Integer newMealId = START_SEQ + newMeals.size() + 4; //New counter for newMeals
-        Meal newMeal = new Meal(newMealId, LocalDateTime.of(2015, Month.MAY, 31, 15, 15), "Новый обед", 2500);
+        Meal newMeal = new Meal(null, LocalDateTime.of(2015, Month.MAY, 31, 15, 15), "Новый обед", 2500);
+        Meal createdMeal = service.save(newMeal, AuthorizedUser.id());
+        newMeal.setId(createdMeal.getId());
         newMeals.add(newMeal);
-        service.save(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 15, 15), "Новый обед", 2500), AuthorizedUser.id());
-//        service.save(newMeal, AuthorizedUser.id());
         MATCHER.assertCollectionEquals(newMeals.stream()
                         .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                         .collect(Collectors.toList()),
                 service.getAll(AuthorizedUser.id()));
     }
-
-    @Test (expected = NotFoundException.class)
-    public void saveNotFound() {
-        Integer newMealId = START_SEQ + MEALS.size() + 4; //New counter for newMeals
-        Meal newMeal = new Meal(newMealId, LocalDateTime.of(2015, Month.MAY, 30, 11, 15), "Новый ужин 2", 1500);
-        service.update(newMeal, INTEGER_ZERO);
-    }
-
 }
