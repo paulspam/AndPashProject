@@ -135,6 +135,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- For Magic Number-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <profiles>
