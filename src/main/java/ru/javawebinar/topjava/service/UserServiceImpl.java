@@ -22,11 +22,6 @@ public class UserServiceImpl implements UserService {
         this.repository = repository;
     }
 
-//    @Autowired
-//    public UserServiceImpl(UserRepository repository) {
-//        this.repository = repository;
-//    }
-
     @Override
     public User save(User user) {
         return repository.save(user);

@@ -21,11 +21,6 @@ public class MealServiceImpl implements MealService {
         this.repository = repository;
     }
 
-//    @Autowired
-//    public MealServiceImpl(MealRepository repository) {
-//        this.repository = repository;
-//    }
-
     @Override
     public Meal get(int id, int userId) {
         return checkNotFoundWithId(repository.get(id, userId), id);

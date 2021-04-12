@@ -33,23 +33,12 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     {
         MealsUtil.MEALS.forEach(um -> save(um, USER_ID));
-
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510), ADMIN_ID);
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500), ADMIN_ID);
     }
 
-
     @Override
     public Meal save(Meal meal, int userId) {
-/*
-        if (meal.isNew()) {
-            meal.setId(counter.incrementAndGet());
-        } else if (get(meal.getId(), userId) == null) {
-            return null;
-        }
-        Map<Integer, Meal> meals = repository.computeIfAbsent(userId, ConcurrentHashMap::new);
-        return meals.put(meal.getId(), meal);
-*/
 
         Map<Integer, Meal> meals = repository.computeIfAbsent(userId, ConcurrentHashMap::new);
         if (meal.isNew()) {
