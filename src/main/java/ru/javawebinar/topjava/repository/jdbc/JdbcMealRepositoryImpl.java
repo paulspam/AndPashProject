@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
@@ -27,13 +26,15 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
-    final String mealTableName = "meal";
+    final String MEAL_TABLE_NAME = "meal";
+
+    final String KEY_COLUMN_NAME = "id";
 
     @Autowired
     public JdbcMealRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(dataSource)
-                .withTableName(mealTableName)
-                .usingGeneratedKeyColumns("id");
+                .withTableName(MEAL_TABLE_NAME)
+                .usingGeneratedKeyColumns(KEY_COLUMN_NAME);
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
@@ -74,14 +75,12 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meal WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
-        return meals;
+        return jdbcTemplate.query("SELECT * FROM meal WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meal WHERE user_id=? AND " +
+        return jdbcTemplate.query("SELECT * FROM meal WHERE user_id=? AND " +
                 "date_time>=? AND date_time<=?  ORDER BY date_time DESC", ROW_MAPPER, userId, startDate, endDate);
-        return meals;
     }
 }
