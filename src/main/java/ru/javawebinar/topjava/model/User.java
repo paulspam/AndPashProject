@@ -11,6 +11,7 @@ import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class User extends NamedEntity {
 
     private String email;
@@ -24,9 +25,6 @@ public class User extends NamedEntity {
     private Set<Role> roles;
 
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
-
-    public User() {
-    }
 
     public User(User u) {
         this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getCaloriesPerDay(), u.isEnabled(), u.getRoles());

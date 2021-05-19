@@ -9,15 +9,13 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Meal extends BaseEntity {
     private LocalDateTime dateTime;
 
     private String description;
 
     private int calories;
-
-    public Meal(){
-    }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
